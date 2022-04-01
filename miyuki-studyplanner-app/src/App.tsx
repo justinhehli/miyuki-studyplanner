@@ -1,10 +1,12 @@
 import React, { useState } from "react";
-import CssBaseline from "@mui/material/CssBaseline";
-import "./App.css";
-import { createTheme, styled, ThemeProvider } from "@mui/material/styles";
-import SideDrawer, { DrawerHeader, sideDrawerWidth } from "./components/base/SideDrawer";
 import Box from "@mui/material/Box";
+import CssBaseline from "@mui/material/CssBaseline";
+import { createTheme, styled, ThemeProvider } from "@mui/material/styles";
+import { Route, Routes } from "react-router-dom";
+import "./App.css";
 import CustomAppBar from "./components/base/CustomAppBar";
+import SideDrawer, { DrawerHeader, sideDrawerWidth } from "./components/base/SideDrawer";
+import SemestersPage from "./components/semester/SemestersPage";
 
 const theme = createTheme({
   typography: {
@@ -58,6 +60,9 @@ function App() {
         <SideDrawer isOpen={isSideDrawerOpen} onDrawerClose={handleDrawerClose} />
         <Main open={isSideDrawerOpen}>
           <DrawerHeader />
+          <Routes>
+            <Route path="/" element={<SemestersPage />} />
+          </Routes>
         </Main>
       </Box>
     </ThemeProvider>

@@ -8,6 +8,7 @@ import ListItem from "@mui/material/ListItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import { styled } from "@mui/material/styles";
 import DashboardIcon from "@mui/icons-material/Dashboard";
+import CalendarViewMonthIcon from "@mui/icons-material/CalendarViewMonth";
 import ListItemText from "@mui/material/ListItemText";
 
 export const sideDrawerWidth = 240;
@@ -41,12 +42,17 @@ const SideDrawer: React.FC<{ isOpen: boolean; onDrawerClose: () => void }> = (pr
       </DrawerHeader>
       <Divider />
       <List>
-        <ListItem button key={"Dashboard"}>
-          <ListItemIcon>
-            <DashboardIcon />
-          </ListItemIcon>
-          <ListItemText primary={"Dashboard"} />
-        </ListItem>
+        {[
+          { key: "Home", icon: DashboardIcon },
+          { key: "Semesters", icon: CalendarViewMonthIcon },
+        ].map((i) => (
+          <ListItem button key={i.key}>
+            <ListItemIcon>
+              <i.icon />
+            </ListItemIcon>
+            <ListItemText primary={i.key} />
+          </ListItem>
+        ))}
       </List>
     </Drawer>
   );

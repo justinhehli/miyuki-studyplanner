@@ -40,7 +40,7 @@ const CustomAppBar: React.FC<{
 }> = (props) => {
   return (
     <AppBar position="fixed" open={props.isSideDrawerOpen}>
-      <Toolbar variant="dense">
+      <Toolbar>
         <IconButton
           color="inherit"
           aria-label="open drawer"
@@ -51,7 +51,7 @@ const CustomAppBar: React.FC<{
           <MenuIcon />
         </IconButton>
         <Typography variant="h6" noWrap component="div" fontWeight="lighter" sx={styles.white}>
-          Miyuky Study Planner
+          Miyuki Study Planner
         </Typography>
       </Toolbar>
     </AppBar>
