@@ -1,13 +1,10 @@
 import Container from "@mui/material/Container";
 import Pagination from "@mui/material/Pagination";
 import Typography from "@mui/material/Typography";
-import React, { useState } from "react";
-import Semester from "../../models/semester";
-
-const semesterData = [
-  new Semester(new Date(2022, 1, 1), new Date(2022, 6, 30), 6),
-  new Semester(new Date(2022, 7, 1), new Date(2022, 12, 31), 7),
-].sort((a, b) => a.index - b.index);
+import React, { useEffect, useState } from "react";
+import { useAppSelector } from "../../store";
+import { selectAllSemestersSorted } from "../../store/semester/semester-slice-selectors";
+import SingleSemester from "./SingleSemester";
 
 const styles = {
   centeredContainer: {
@@ -25,23 +22,42 @@ const styles = {
 };
 
 const SemestersPage: React.FC = () => {
-  const [page, setPage] = useState(() => {
-    const currentSemIndex = semesterData.findIndex((s) => s.isCurrentSemester());
-    return currentSemIndex !== -1 ? currentSemIndex + 1 : semesterData.length > 1 ? 0 : undefined;
-  });
+  const [page, setPage] = useState<number | null>(null);
 
-  const paginationChangeHandler = (event: React.ChangeEvent<unknown>, value: number) => {
+  const semesters = useAppSelector((state) => selectAllSemestersSorted(state));
+
+  useEffect(() => {
+    if (page == null && semesters.length !== 0) {
+      setPage(semesters.length);
+    }
+  }, [page, semesters.length]);
+
+  const paginationChangeHandler = (_event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
   };
 
-  if (semesterData.length === 0) {
+  if (semesters.length === 0) {
     return <Typography>no semesters yet</Typography>;
+  }
+  if (page == null) {
+    return <Typography>no semester selected</Typography>;
   }
 
   return (
     <Container sx={styles.centeredContainer}>
+      {
+        // use array.map() instead of determining selected semester in a separate const to enable pagination animation
+        semesters.map((s, i) => {
+          if (i === page! - 1) {
+            return <SingleSemester semester={s} />;
+          }
+
+          return null;
+        })
+      }
+
       <Pagination
-        count={semesterData.length}
+        count={semesters.length}
         page={page}
         size="small"
         onChange={paginationChangeHandler}

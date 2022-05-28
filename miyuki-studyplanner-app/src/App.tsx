@@ -7,6 +7,7 @@ import "./App.css";
 import CustomAppBar from "./components/base/CustomAppBar";
 import SideDrawer, { DrawerHeader, sideDrawerWidth } from "./components/base/SideDrawer";
 import SemestersPage from "./components/semester/SemestersPage";
+import type {} from "@mui/lab/themeAugmentation";
 
 const theme = createTheme({
   typography: {
@@ -18,6 +19,15 @@ const theme = createTheme({
     },
     secondary: {
       main: "#fdbbaa",
+    },
+  },
+  components: {
+    MuiTimeline: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "red",
+        },
+      },
     },
   },
 });
