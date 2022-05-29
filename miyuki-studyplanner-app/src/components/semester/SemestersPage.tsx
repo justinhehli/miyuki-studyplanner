@@ -1,5 +1,4 @@
 import Box from "@mui/material/Box";
-import Slide from "@mui/material/Slide";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import Typography from "@mui/material/Typography";
@@ -7,13 +6,11 @@ import React, { useEffect, useState } from "react";
 import { useAppSelector } from "../../store";
 import { selectAllSemestersSorted } from "../../store/semester/semester-slice-selectors";
 import TabPanel, { tabA11yProps } from "../base/TabPanel";
-import SemesterInfo from "./SemesterInfo";
-import SemesterModules from "./SemesterModules";
+import SemesterView from "./SemesterView";
 
 const tabsWidthPx = 200;
 const SemestersPage: React.FC = () => {
   const [selectedSemesterArrayIndex, setSelectedSemesterArrayIndex] = useState<number | null>(null);
-  const [semesterMenuTabsValue, setSemesterMenuTabsValue] = useState(0);
 
   const semesters = useAppSelector((state) => selectAllSemestersSorted(state));
 
@@ -26,10 +23,6 @@ const SemestersPage: React.FC = () => {
 
   const semestersTabValueChangeHandler = (_event: React.SyntheticEvent, newValue: number) => {
     setSelectedSemesterArrayIndex(newValue);
-  };
-
-  const semesterMenuTabValueChangeHandler = (_event: React.SyntheticEvent, newValue: number) => {
-    setSemesterMenuTabsValue(newValue);
   };
 
   if (semesters.length === 0) {
@@ -60,30 +53,7 @@ const SemestersPage: React.FC = () => {
           width={`calc(100% - ${tabsWidthPx * 2}px)`}
           containerPadding={0}
         >
-          <Slide direction="down" in={true}>
-            <Box sx={{ width: "100%" }}>
-              <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-                <Tabs
-                  value={semesterMenuTabsValue}
-                  onChange={semesterMenuTabValueChangeHandler}
-                  aria-label="basic tabs example"
-                >
-                  <Tab label="Semester Info" {...tabA11yProps(0)} />
-                  <Tab label="Modules" {...tabA11yProps(1)} />
-                  <Tab label="Schedule" {...tabA11yProps(2)} />
-                </Tabs>
-              </Box>
-              <TabPanel value={semesterMenuTabsValue} index={0}>
-                <SemesterInfo semester={s} />
-              </TabPanel>
-              <TabPanel value={semesterMenuTabsValue} index={1}>
-                <SemesterModules semesterId={s.id} />
-              </TabPanel>
-              <TabPanel value={semesterMenuTabsValue} index={2}>
-                Schedule
-              </TabPanel>
-            </Box>
-          </Slide>
+          <SemesterView semester={s} />
         </TabPanel>
       ))}
     </Box>

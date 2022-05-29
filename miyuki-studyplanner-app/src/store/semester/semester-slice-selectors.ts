@@ -1,9 +1,12 @@
+import { createSelector } from "@reduxjs/toolkit";
 import { RootState } from "..";
 
 export const selectAllSemestersSorted = (state: RootState) =>
   [...state.semester.semesters].sort((a, b) => a.index - b.index);
 
-export const selectModulesBySemesterId = (state: RootState, semesterId: string) => {
-  const semester = state.semester.semesters.find((s) => s.id === semesterId);
-  return semester != null ? semester.modules : null;
+export const selectModulesBySemesterId = (semesterId: string) => {
+  return createSelector([selectAllSemestersSorted], (semesters) => {
+    const semester = semesters.find((s) => s.id === semesterId);
+    return semester != null ? semester.modules : null;
+  });
 };
