@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
-import iModule from "./i-module";
+import IModule from "./i-module";
 import ISemester from "./i-semester";
 
 class Semester implements ISemester {
@@ -7,13 +7,13 @@ class Semester implements ISemester {
   startDate: Date;
   endDate: Date;
   index: number;
-  modules: iModule[];
+  modules: IModule[];
 
   constructor(
     startDate: Date,
     endDate: Date,
     index: number,
-    modules: iModule[],
+    modules: IModule[],
     id: string | null = null
   ) {
     this.id = id ?? uuidv4();

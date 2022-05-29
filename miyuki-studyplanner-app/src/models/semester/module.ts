@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
-import iModule from "./i-module";
+import IModule from "./i-module";
 
-class Module implements iModule {
+class Module implements IModule {
   id: string;
   title: string;
   description: string | null;

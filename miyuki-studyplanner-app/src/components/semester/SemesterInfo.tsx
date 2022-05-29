@@ -23,6 +23,7 @@ const SemesterInfo: React.FC<{ semester: ISemester }> = (props) => {
         <DesktopDatePicker
           label="Start Date"
           inputFormat="dd-MM-yyyy"
+          mask="__-__-____"
           value={props.semester.startDate}
           onChange={() => {}}
           renderInput={(params) => <TextField {...params} size="small" />}
@@ -30,6 +31,7 @@ const SemesterInfo: React.FC<{ semester: ISemester }> = (props) => {
         <DesktopDatePicker
           label="End Date"
           inputFormat="dd-MM-yyyy"
+          mask="__-__-____"
           value={props.semester.endDate}
           onChange={() => {}}
           renderInput={(params) => <TextField {...params} size="small" />}

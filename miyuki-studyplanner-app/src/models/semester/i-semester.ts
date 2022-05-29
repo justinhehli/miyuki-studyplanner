@@ -1,4 +1,4 @@
-import iModule from "./i-module";
+import IModule from "./i-module";
 
 interface ISemester {
   id: string;
@@ -6,7 +6,7 @@ interface ISemester {
   endDate: Date;
   index: number;
 
-  modules: iModule[];
+  modules: IModule[];
 
   isCurrentSemester: () => boolean;
 }

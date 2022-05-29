@@ -1,4 +1,4 @@
-interface iModule {
+interface IModule {
   id: string;
   title: string;
   description: string | null;
@@ -7,4 +7,4 @@ interface iModule {
   timeEffortPredictedHours: number;
 }
 
-export default iModule;
+export default IModule;
