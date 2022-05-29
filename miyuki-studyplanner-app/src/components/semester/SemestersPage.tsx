@@ -1,36 +1,14 @@
 import Box from "@mui/material/Box";
-import Container from "@mui/material/Container";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import Typography from "@mui/material/Typography";
 import React, { useEffect, useState } from "react";
 import { useAppSelector } from "../../store";
 import { selectAllSemestersSorted } from "../../store/semester/semester-slice-selectors";
+import TabPanel, { tabA11yProps } from "../base/TabPanel";
 import SingleSemester from "./SingleSemester";
 
-const TabPanel = (props: { children?: React.ReactNode; index: number; value: number }) => {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`vertical-tabpanel-${index}`}
-      aria-labelledby={`vertical-tab-${index}`}
-      {...other}
-    >
-      {value === index && <Container sx={{ p: 3, border: "1px solid red" }}>{children}</Container>}
-    </div>
-  );
-};
-
-const a11yProps = (index: number) => {
-  return {
-    id: `vertical-tab-${index}`,
-    "aria-controls": `vertical-tabpanel-${index}`,
-  };
-};
-
+const tabsWidthPx = 200;
 const SemestersPage: React.FC = () => {
   const [selectedSemesterArrayIndex, setSelectedSemesterArrayIndex] = useState<number | null>(null);
 
@@ -61,14 +39,20 @@ const SemestersPage: React.FC = () => {
         variant="scrollable"
         value={selectedSemesterArrayIndex}
         onChange={tabValueChangeHandler}
-        sx={{ borderRight: 1, borderColor: "divider" }}
+        sx={{ borderRight: 1, borderColor: "divider", width: `${tabsWidthPx}px` }}
       >
         {semesters.map((s, i) => (
-          <Tab key={i} label={`Semester ${s.index}`} {...a11yProps(0)} />
+          <Tab key={i} label={`Semester ${s.index}`} {...tabA11yProps(0)} />
         ))}
       </Tabs>
       {semesters.map((s, i) => (
-        <TabPanel key={i} value={selectedSemesterArrayIndex} index={i}>
+        <TabPanel
+          key={i}
+          value={selectedSemesterArrayIndex}
+          index={i}
+          width={`calc(100% - ${tabsWidthPx * 2}px)`}
+          containerPadding={0}
+        >
           <SingleSemester semester={s} />
         </TabPanel>
       ))}
