@@ -6,7 +6,7 @@ import Semester from "../../models/semester/semester";
 
 const semester6ModuleTestData = [
   new Module("Biochemistry 1", null, 8, 8 * 30),
-  new Module("Biomedicine 2", "This is a biomedicine modulle", 4, 4 * 30, 150),
+  new Module("Medicine 2", "This is a biomedicine modulle", 4, 4 * 30, 150),
 ] as IModule[];
 
 const semesterTestData = [
