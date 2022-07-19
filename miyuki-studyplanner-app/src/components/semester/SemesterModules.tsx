@@ -23,7 +23,7 @@ const SemesterModules: React.FC<{ semesterId: string }> = (props) => {
   return (
     <Box sx={styles.modulesContainer}>
       {modules.map((m) => (
-        <ModuleView module={m} />
+        <ModuleView key={m.id} module={m} />
       ))}
     </Box>
   );

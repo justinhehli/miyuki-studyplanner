@@ -3,6 +3,7 @@ import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import Typography from "@mui/material/Typography";
 import React, { useEffect, useState } from "react";
+import { isCurrentSemester } from "../../models/semester/i-semester";
 import { useAppSelector } from "../../store";
 import { selectAllSemestersSorted } from "../../store/semester/semester-slice-selectors";
 import TabPanel, { tabA11yProps } from "../base/TabPanel";
@@ -16,7 +17,7 @@ const SemestersPage: React.FC = () => {
 
   useEffect(() => {
     if (selectedSemesterArrayIndex == null && semesters.length !== 0) {
-      const currentSemArrayIndex = semesters.findIndex((s) => s.isCurrentSemester());
+      const currentSemArrayIndex = semesters.findIndex((s) => isCurrentSemester(s));
       setSelectedSemesterArrayIndex(currentSemArrayIndex !== -1 ? currentSemArrayIndex : semesters.length - 1);
     }
   }, [selectedSemesterArrayIndex, semesters]);
@@ -33,7 +34,7 @@ const SemestersPage: React.FC = () => {
   }
 
   return (
-    <Box sx={{ flexGrow: 1, bgcolor: "background.paper", display: "flex", height: 224 }}>
+    <Box sx={{ flexGrow: 1, bgcolor: "background.paper", display: "flex" }}>
       <Tabs
         orientation="vertical"
         variant="scrollable"
