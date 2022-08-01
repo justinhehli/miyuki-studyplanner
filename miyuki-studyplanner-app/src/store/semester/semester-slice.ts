@@ -65,6 +65,9 @@ export const semesterSlice = createSlice({
 
       state.semesters.push(newSemester);
     },
+    deleteSemesterById(state, action: PayloadAction<string>) {
+      state.semesters = state.semesters.filter((s) => s.id !== action.payload);
+    },
     updateSemesterValues(state, action: PayloadAction<ISemester>) {
       const semester = state.semesters.find((s) => s.id === action.payload.id);
       if (
@@ -110,9 +113,27 @@ export const semesterSlice = createSlice({
       } as IModule;
       semester.modules.push(newModule);
     },
+    deleteModuleById(state, action: PayloadAction<string>) {
+      let moduleIndex = -1;
+      let i = 0;
+      while (i < state.semesters.length && moduleIndex === -1) {
+        moduleIndex = state.semesters[i++].modules.findIndex((m) => m.id === action.payload);
+      }
+
+      if (moduleIndex !== -1) {
+        state.semesters[i - 1].modules.splice(moduleIndex, 1);
+      }
+    },
   },
 });
 
-export const { updateModuleValues, updateSemesterValues, addModuleToSemesterById, addSemester } = semesterSlice.actions;
+export const {
+  addSemester,
+  deleteSemesterById,
+  updateSemesterValues,
+  addModuleToSemesterById,
+  deleteModuleById,
+  updateModuleValues,
+} = semesterSlice.actions;
 
 export default semesterSlice.reducer;

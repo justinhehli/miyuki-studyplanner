@@ -9,8 +9,9 @@ import IconButton from "@mui/material/IconButton";
 import Avatar from "@mui/material/Avatar";
 import TextField from "@mui/material/TextField";
 import { useAppDispatch } from "../../store";
-import { updateModuleValues } from "../../store/semester/semester-slice";
+import { deleteModuleById, updateModuleValues } from "../../store/semester/semester-slice";
 import Grid from "@mui/material/Grid";
+import Button from "@mui/material/Button";
 
 const ModuleView: React.FC<{ module: IModule }> = (props) => {
   const [isContentVisible, setIsContentVisible] = useState(false);
@@ -40,6 +41,10 @@ const ModuleView: React.FC<{ module: IModule }> = (props) => {
 
   const timeEffortPredictedChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(updateModuleValues({ ...props.module, timeEffortPredictedHours: Number(event.target.value) }));
+  };
+
+  const deleteModuleClickHandler = (_event: React.MouseEvent) => {
+    dispatch(deleteModuleById(props.module.id));
   };
 
   return (
@@ -118,6 +123,11 @@ const ModuleView: React.FC<{ module: IModule }> = (props) => {
                   shrink: true,
                 }}
               />
+            </Grid>
+            <Grid item xs={12}>
+              <Button variant="outlined" color="secondary" onClick={deleteModuleClickHandler}>
+                Delete Module
+              </Button>
             </Grid>
           </Grid>
         </CardContent>
