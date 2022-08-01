@@ -45,6 +45,26 @@ export const semesterSlice = createSlice({
     semesters: semesterTestData,
   },
   reducers: {
+    addSemester(state) {
+      const latestSem = state.semesters.reduce((prev, current) => {
+        return prev.index > current.index ? prev : current;
+      });
+
+      const newStartDate = new Date(latestSem.endDateStr);
+      newStartDate.setDate(newStartDate.getDate() + 1);
+      const newEndDate = new Date(newStartDate);
+      newEndDate.setDate(newEndDate.getDate() + 1);
+
+      const newSemester = {
+        id: uuidv4(),
+        startDateStr: newStartDate.toDateString(),
+        endDateStr: newEndDate.toDateString(),
+        index: latestSem.index + 1,
+        modules: [],
+      } as ISemester;
+
+      state.semesters.push(newSemester);
+    },
     updateSemesterValues(state, action: PayloadAction<ISemester>) {
       const semester = state.semesters.find((s) => s.id === action.payload.id);
       if (
@@ -87,12 +107,12 @@ export const semesterSlice = createSlice({
         ects: 0,
         timeEffortByEctsHours: 0 * 30,
         timeEffortPredictedHours: 0 * 30,
-      };
+      } as IModule;
       semester.modules.push(newModule);
     },
   },
 });
 
-export const { updateModuleValues, updateSemesterValues, addModuleToSemesterById } = semesterSlice.actions;
+export const { updateModuleValues, updateSemesterValues, addModuleToSemesterById, addSemester } = semesterSlice.actions;
 
 export default semesterSlice.reducer;

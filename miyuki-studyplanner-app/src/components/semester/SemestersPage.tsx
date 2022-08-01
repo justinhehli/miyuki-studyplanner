@@ -1,10 +1,12 @@
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import Typography from "@mui/material/Typography";
 import React, { useEffect, useState } from "react";
 import { isCurrentSemester } from "../../models/semester/i-semester";
-import { useAppSelector } from "../../store";
+import { useAppDispatch, useAppSelector } from "../../store";
+import { addSemester } from "../../store/semester/semester-slice";
 import { selectAllSemestersSorted } from "../../store/semester/semester-slice-selectors";
 import TabPanel, { tabA11yProps } from "../base/TabPanel";
 import SemesterView from "./SemesterView";
@@ -27,6 +29,7 @@ const styles = {
 const SemestersPage: React.FC = () => {
   const [selectedSemesterArrayIndex, setSelectedSemesterArrayIndex] = useState<number | null>(null);
 
+  const dispatch = useAppDispatch();
   const semesters = useAppSelector((state) => selectAllSemestersSorted(state));
 
   useEffect(() => {
@@ -40,12 +43,9 @@ const SemestersPage: React.FC = () => {
     setSelectedSemesterArrayIndex(newValue);
   };
 
-  if (semesters.length === 0) {
-    return <Typography>no semesters yet</Typography>;
-  }
-  if (selectedSemesterArrayIndex == null) {
-    return <Typography>no semester selected</Typography>;
-  }
+  const addSemesterClickHandler = (_event: React.MouseEvent) => {
+    dispatch(addSemester());
+  };
 
   return (
     <Box sx={{ ...styles.box }}>
@@ -56,22 +56,27 @@ const SemestersPage: React.FC = () => {
         onChange={semestersTabValueChangeHandler}
         sx={{ ...styles.tabs }}
       >
+        {semesters.length === 0 && <Typography>no semesters yet</Typography>}
         {semesters.map((s, i) => (
           <Tab key={i} label={`Semester ${s.index}`} {...tabA11yProps(0)} />
         ))}
+        <Button variant="text" onClick={addSemesterClickHandler}>
+          + Semester
+        </Button>
       </Tabs>
       <Box sx={{ width: `${tabsWidthPx}px` }} />
-      {semesters.map((s, i) => (
-        <TabPanel
-          key={i}
-          value={selectedSemesterArrayIndex}
-          index={i}
-          width={`calc(100% - ${tabsWidthPx * 2}px)`}
-          containerPadding={0}
-        >
-          <SemesterView semester={s} />
-        </TabPanel>
-      ))}
+      {selectedSemesterArrayIndex != null &&
+        semesters.map((s, i) => (
+          <TabPanel
+            key={i}
+            value={selectedSemesterArrayIndex}
+            index={i}
+            width={`calc(100% - ${tabsWidthPx * 2}px)`}
+            containerPadding={0}
+          >
+            <SemesterView semester={s} />
+          </TabPanel>
+        ))}
     </Box>
   );
 };

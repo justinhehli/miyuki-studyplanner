@@ -31,7 +31,7 @@ const SemesterModules: React.FC<{ semesterId: string }> = (props) => {
           <ModuleView key={m.id} module={m} />
         ))}
         <Button variant="text" sx={{ alignSelf: "flex-start" }} onClick={addModuleClickHandler}>
-          + Add Module
+          + Module
         </Button>
       </Box>
     </React.Fragment>

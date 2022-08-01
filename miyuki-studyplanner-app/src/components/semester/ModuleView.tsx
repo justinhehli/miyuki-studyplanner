@@ -71,7 +71,7 @@ const ModuleView: React.FC<{ module: IModule }> = (props) => {
             </Grid>
             <Grid item xs={12}>
               <TextField
-                label="Description"
+                label="Description, Notes, ..."
                 variant="standard"
                 size="small"
                 multiline
