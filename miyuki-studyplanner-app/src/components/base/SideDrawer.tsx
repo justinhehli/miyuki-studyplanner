@@ -20,21 +20,20 @@ export const DrawerHeader = styled("div")(({ theme }) => ({
   justifyContent: "flex-end",
 }));
 
+const styles = {
+  drawer: {
+    width: sideDrawerWidth,
+    flexShrink: 0,
+    "& .MuiDrawer-paper": {
+      width: sideDrawerWidth,
+      boxSizing: "border-box",
+    },
+  },
+};
+
 const SideDrawer: React.FC<{ isOpen: boolean; onDrawerClose: () => void }> = (props) => {
   return (
-    <Drawer
-      sx={{
-        width: sideDrawerWidth,
-        flexShrink: 0,
-        "& .MuiDrawer-paper": {
-          width: sideDrawerWidth,
-          boxSizing: "border-box",
-        },
-      }}
-      variant="persistent"
-      anchor="left"
-      open={props.isOpen}
-    >
+    <Drawer sx={{ ...styles.drawer }} variant="persistent" anchor="left" open={props.isOpen}>
       <DrawerHeader>
         <IconButton onClick={props.onDrawerClose}>
           <ChevronLeftIcon />

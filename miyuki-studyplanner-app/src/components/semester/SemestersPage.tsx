@@ -10,6 +10,20 @@ import TabPanel, { tabA11yProps } from "../base/TabPanel";
 import SemesterView from "./SemesterView";
 
 const tabsWidthPx = 200;
+const styles = {
+  box: {
+    flexGrow: 1,
+    bgcolor: "background.paper",
+    display: "flex",
+  },
+  tabs: {
+    borderRight: 1,
+    borderColor: "divider",
+    width: `${tabsWidthPx}px`,
+    position: "fixed",
+  },
+};
+
 const SemestersPage: React.FC = () => {
   const [selectedSemesterArrayIndex, setSelectedSemesterArrayIndex] = useState<number | null>(null);
 
@@ -34,18 +48,19 @@ const SemestersPage: React.FC = () => {
   }
 
   return (
-    <Box sx={{ flexGrow: 1, bgcolor: "background.paper", display: "flex" }}>
+    <Box sx={{ ...styles.box }}>
       <Tabs
         orientation="vertical"
         variant="scrollable"
         value={selectedSemesterArrayIndex}
         onChange={semestersTabValueChangeHandler}
-        sx={{ borderRight: 1, borderColor: "divider", width: `${tabsWidthPx}px` }}
+        sx={{ ...styles.tabs }}
       >
         {semesters.map((s, i) => (
           <Tab key={i} label={`Semester ${s.index}`} {...tabA11yProps(0)} />
         ))}
       </Tabs>
+      <Box sx={{ width: `${tabsWidthPx}px` }} />
       {semesters.map((s, i) => (
         <TabPanel
           key={i}

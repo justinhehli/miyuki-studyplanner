@@ -11,15 +11,23 @@ import TextField from "@mui/material/TextField";
 import { useAppDispatch } from "../../store";
 import { updateModuleValues } from "../../store/semester/semester-slice";
 import Grid from "@mui/material/Grid";
-import InputAdornment from "@mui/material/InputAdornment";
 
 const ModuleView: React.FC<{ module: IModule }> = (props) => {
   const [isContentVisible, setIsContentVisible] = useState(false);
 
   const dispatch = useAppDispatch();
 
-  const contentVisibleClickHandler = (_event: React.MouseEvent) => {
+  const contentVisibleClickHandler = (event: React.MouseEvent) => {
+    event.stopPropagation();
     setIsContentVisible((previousValue) => !previousValue);
+  };
+
+  const cardHeaderClickHandler = (_event: React.MouseEvent) => {
+    setIsContentVisible((previousValue) => !previousValue);
+  };
+
+  const titleChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch(updateModuleValues({ ...props.module, title: event.target.value } as IModule));
   };
 
   const descriptionChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -39,16 +47,28 @@ const ModuleView: React.FC<{ module: IModule }> = (props) => {
       <CardHeader
         title={props.module.title}
         subheader={`${props.module.ects} ECTS`}
-        avatar={<Avatar>{props.module.title[0].toUpperCase()}</Avatar>}
+        avatar={<Avatar>{(props.module.title[0] ?? "?").toUpperCase()}</Avatar>}
         action={
           <IconButton onClick={contentVisibleClickHandler}>
             {!isContentVisible ? <KeyboardArrowDownIcon /> : <KeyboardArrowUpIcon />}
           </IconButton>
         }
+        onClick={cardHeaderClickHandler}
       />
       {isContentVisible && props.module.title != null && (
         <CardContent>
           <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <TextField
+                label="Title"
+                variant="standard"
+                size="small"
+                multiline
+                fullWidth
+                value={props.module.title}
+                onChange={titleChangeHandler}
+              />
+            </Grid>
             <Grid item xs={12}>
               <TextField
                 label="Description"

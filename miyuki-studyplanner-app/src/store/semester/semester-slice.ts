@@ -74,9 +74,25 @@ export const semesterSlice = createSlice({
         module.title = action.payload.title;
       }
     },
+    addModuleToSemesterById(state, action: PayloadAction<string>) {
+      const semester = state.semesters.find((s) => s.id === action.payload);
+      if (semester == null) {
+        return;
+      }
+
+      const newModule = {
+        id: uuidv4(),
+        title: "-",
+        description: null,
+        ects: 0,
+        timeEffortByEctsHours: 0 * 30,
+        timeEffortPredictedHours: 0 * 30,
+      };
+      semester.modules.push(newModule);
+    },
   },
 });
 
-export const { updateModuleValues, updateSemesterValues } = semesterSlice.actions;
+export const { updateModuleValues, updateSemesterValues, addModuleToSemesterById } = semesterSlice.actions;
 
 export default semesterSlice.reducer;
