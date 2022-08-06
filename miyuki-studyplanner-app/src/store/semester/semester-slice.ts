@@ -31,15 +31,15 @@ const semester7ModuleTestData: IModule[] = [
 
 const semester7ScheduleTestData: IMiyukiAppointmentModel[] = [
   {
-    startDate: new Date(2022, 7, 6, 12, 0).toDateString(),
-    endDate: new Date(2022, 7, 6, 16, 0).toDateString(),
+    startDate: new Date(2022, 7, 6, 12, 0).toISOString(),
+    endDate: new Date(2022, 7, 6, 16, 0).toISOString(),
     title: "Some random event",
     semesterId: semester7Id,
     moduleId: null,
   },
   {
-    startDate: new Date(2022, 7, 4, 12, 0).toDateString(),
-    endDate: new Date(2022, 7, 4, 16, 0).toDateString(),
+    startDate: new Date(2022, 7, 4, 12, 0).toISOString(),
+    endDate: new Date(2022, 7, 4, 16, 0).toISOString(),
     title: "BioChem1 appointment",
     semesterId: semester7Id,
     moduleId: semester7Biochemistry1Id,
