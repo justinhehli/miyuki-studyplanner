@@ -1,3 +1,4 @@
+import IMiyukiAppointmentModel from "./i-miyuki-appointment-model";
 import IModule from "./i-module";
 
 interface ISemester {
@@ -7,6 +8,7 @@ interface ISemester {
   index: number;
 
   modules: IModule[];
+  appointments: IMiyukiAppointmentModel[];
 }
 
 export const isCurrentSemester = (semester: ISemester) => {

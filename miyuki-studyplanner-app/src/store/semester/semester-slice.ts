@@ -2,15 +2,20 @@ import { v4 as uuidv4 } from "uuid";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import IModule from "../../models/semester/i-module";
 import ISemester from "../../models/semester/i-semester";
+import IMiyukiAppointmentModel from "../../models/semester/i-miyuki-appointment-model";
 
-const semester6ModuleTestData = [
+const semester7Id = uuidv4();
+const semester7Biochemistry1Id = uuidv4();
+const semester7ModuleTestData: IModule[] = [
   {
-    id: uuidv4(),
+    id: semester7Biochemistry1Id,
     title: "Biochemistry 1",
     description: null,
     ects: 8,
     timeEffortByEctsHours: 8 * 30,
     timeEffortPredictedHours: 8 * 30,
+    semesterId: semester7Id,
+    color: "green",
   },
   {
     id: uuidv4(),
@@ -19,25 +24,46 @@ const semester6ModuleTestData = [
     ects: 4,
     timeEffortByEctsHours: 4 * 30,
     timeEffortPredictedHours: 4 * 30,
+    semesterId: semester7Id,
+    color: "red",
   },
-] as IModule[];
+];
 
-const semesterTestData = [
+const semester7ScheduleTestData: IMiyukiAppointmentModel[] = [
+  {
+    startDate: new Date(2022, 7, 6, 12, 0).toDateString(),
+    endDate: new Date(2022, 7, 6, 16, 0).toDateString(),
+    title: "Some random event",
+    semesterId: semester7Id,
+    moduleId: null,
+  },
+  {
+    startDate: new Date(2022, 7, 4, 12, 0).toDateString(),
+    endDate: new Date(2022, 7, 4, 16, 0).toDateString(),
+    title: "BioChem1 appointment",
+    semesterId: semester7Id,
+    moduleId: semester7Biochemistry1Id,
+  },
+];
+
+const semesterTestData: ISemester[] = [
   {
     id: uuidv4(),
     startDateStr: new Date(2022, 1, 1).toDateString(),
     endDateStr: new Date(2022, 6, 30).toDateString(),
     index: 6,
-    modules: semester6ModuleTestData,
+    modules: [],
+    appointments: [],
   },
   {
-    id: uuidv4(),
+    id: semester7Id,
     startDateStr: new Date(2022, 7, 1).toDateString(),
     endDateStr: new Date(2022, 12, 31).toDateString(),
     index: 7,
-    modules: [],
+    modules: semester7ModuleTestData.map((m) => ({ ...m, semesterId: semester7Id } as IModule)),
+    appointments: semester7ScheduleTestData,
   },
-] as ISemester[];
+];
 
 export const semesterSlice = createSlice({
   name: "semesters",
@@ -61,6 +87,7 @@ export const semesterSlice = createSlice({
         endDateStr: newEndDate.toDateString(),
         index: latestSem.index + 1,
         modules: [],
+        appointments: [],
       } as ISemester;
 
       state.semesters.push(newSemester);
@@ -95,6 +122,7 @@ export const semesterSlice = createSlice({
         module.timeEffortByEctsHours = action.payload.ects * 30;
         module.timeEffortPredictedHours = action.payload.timeEffortPredictedHours;
         module.title = action.payload.title;
+        module.color = action.payload.color;
       }
     },
     addModuleToSemesterById(state, action: PayloadAction<string>) {

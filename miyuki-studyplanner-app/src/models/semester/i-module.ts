@@ -5,6 +5,9 @@ interface IModule {
   ects: number;
   timeEffortByEctsHours: number;
   timeEffortPredictedHours: number;
+  color: string;
+
+  semesterId: string;
 }
 
 export default IModule;

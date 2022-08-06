@@ -12,6 +12,36 @@ import { useAppDispatch } from "../../store";
 import { deleteModuleById, updateModuleValues } from "../../store/semester/semester-slice";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
+import { ColorResult, TwitterPicker } from "react-color";
+import Tooltip, { TooltipProps, tooltipClasses } from "@mui/material/Tooltip";
+import { styled } from "@mui/material/styles";
+
+const NoBackgroundTooltip = styled(({ className, ...props }: TooltipProps) => (
+  <Tooltip {...props} classes={{ popper: className }} />
+))(({ theme }) => ({
+  [`& .${tooltipClasses.tooltip}`]: {
+    backgroundColor: "rgba(0,0,0,0)",
+    boxShadow: theme.shadows[1],
+  },
+}));
+
+const ModuleAvatar: React.FC<{ module: IModule }> = (props) => {
+  const dispatch = useAppDispatch();
+
+  const colorChangeCompleteHandler = (color: ColorResult) => {
+    dispatch(updateModuleValues({ ...props.module, color: color.hex }));
+  };
+
+  const twitterPicker = <TwitterPicker color={props.module.color} onChangeComplete={colorChangeCompleteHandler} />;
+
+  return (
+    <div onClick={(e) => e.stopPropagation()}>
+      <NoBackgroundTooltip title={twitterPicker} placement="bottom-start">
+        <Avatar sx={{ bgcolor: props.module.color }}>{(props.module.title[0] ?? "?").toUpperCase()}</Avatar>
+      </NoBackgroundTooltip>
+    </div>
+  );
+};
 
 const ModuleView: React.FC<{ module: IModule }> = (props) => {
   const [isContentVisible, setIsContentVisible] = useState(false);
@@ -52,7 +82,7 @@ const ModuleView: React.FC<{ module: IModule }> = (props) => {
       <CardHeader
         title={props.module.title}
         subheader={`${props.module.ects} ECTS`}
-        avatar={<Avatar>{(props.module.title[0] ?? "?").toUpperCase()}</Avatar>}
+        avatar={<ModuleAvatar module={props.module} />}
         action={
           <IconButton onClick={contentVisibleClickHandler}>
             {!isContentVisible ? <KeyboardArrowDownIcon /> : <KeyboardArrowUpIcon />}

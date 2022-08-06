@@ -7,6 +7,7 @@ import TabPanel, { tabA11yProps } from "../base/TabPanel";
 import SemesterInfo from "./SemesterInfo";
 import SemesterModules from "./SemesterModules";
 import ISemester from "../../models/semester/i-semester";
+import SemesterSchedule from "./SemesterSchedule";
 
 const SemesterView: React.FC<{ semester: ISemester }> = (props) => {
   const [semesterMenuTabsValue, setSemesterMenuTabsValue] = useState(0);
@@ -36,7 +37,7 @@ const SemesterView: React.FC<{ semester: ISemester }> = (props) => {
           <SemesterModules semesterId={props.semester.id} />
         </TabPanel>
         <TabPanel value={semesterMenuTabsValue} index={2}>
-          Schedule
+          <SemesterSchedule semesterId={props.semester.id} />
         </TabPanel>
       </Box>
     </Slide>
