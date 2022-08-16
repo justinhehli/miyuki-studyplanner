@@ -5,6 +5,12 @@ import IModule from "../../models/semester/i-module";
 export const selectAllSemestersSorted = (state: RootState) =>
   [...state.semester.semesters].sort((a, b) => b.index - a.index);
 
+export const selectSemesterById = (semesterId: string) => {
+  return createSelector([selectAllSemestersSorted], (semesters) => {
+    return semesters.find((s) => s.id === semesterId) ?? null;
+  });
+};
+
 export const selectModulesBySemesterId = (semesterId: string) => {
   return createSelector([selectAllSemestersSorted], (semesters) => {
     const semester = semesters.find((s) => s.id === semesterId);

@@ -3,8 +3,9 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import IModule from "../../models/semester/i-module";
 import ISemester from "../../models/semester/i-semester";
 import IMiyukiAppointmentModel from "../../models/semester/i-miyuki-appointment-model";
+import { AppointmentModel } from "@devexpress/dx-react-scheduler";
 
-const semester7Id = uuidv4();
+export const semester7Id = uuidv4();
 const semester7Biochemistry1Id = uuidv4();
 const semester7ModuleTestData: IModule[] = [
   {
@@ -31,6 +32,7 @@ const semester7ModuleTestData: IModule[] = [
 
 const semester7ScheduleTestData: IMiyukiAppointmentModel[] = [
   {
+    id: uuidv4(),
     startDate: new Date(2022, 7, 6, 12, 0).toISOString(),
     endDate: new Date(2022, 7, 6, 16, 0).toISOString(),
     title: "Some random event",
@@ -38,6 +40,7 @@ const semester7ScheduleTestData: IMiyukiAppointmentModel[] = [
     moduleId: null,
   },
   {
+    id: uuidv4(),
     startDate: new Date(2022, 7, 4, 12, 0).toISOString(),
     endDate: new Date(2022, 7, 4, 16, 0).toISOString(),
     title: "BioChem1 appointment",
@@ -152,6 +155,28 @@ export const semesterSlice = createSlice({
         state.semesters[i - 1].modules.splice(moduleIndex, 1);
       }
     },
+    updateAppointmentValues(state, action: PayloadAction<AppointmentModel>) {
+      const semester = state.semesters.find((s) => s.id === action.payload.semesterId);
+      const appointment = semester?.appointments.find((a) => a.id === action.payload.id);
+      if (appointment != null) {
+        appointment.title = action.payload.title;
+        appointment.startDate = new Date(action.payload.startDate).toISOString();
+        appointment.endDate = action.payload.endDate ? new Date(action.payload.endDate).toISOString() : undefined;
+        appointment.rRule = action.payload.rRule;
+        appointment.exDate = action.payload.exDate;
+      }
+    },
+    deleteAppointmentById(state, action: PayloadAction<string>) {
+      let appointmentIndex = -1;
+      let i = 0;
+      while (i < state.semesters.length && appointmentIndex === -1) {
+        appointmentIndex = state.semesters[i++].appointments.findIndex((a) => a.id === action.payload);
+      }
+
+      if (appointmentIndex !== -1) {
+        state.semesters[i - 1].appointments.splice(appointmentIndex, 1);
+      }
+    },
   },
 });
 
@@ -162,6 +187,8 @@ export const {
   addModuleToSemesterById,
   deleteModuleById,
   updateModuleValues,
+  updateAppointmentValues,
+  deleteAppointmentById,
 } = semesterSlice.actions;
 
 export default semesterSlice.reducer;

@@ -1,11 +1,11 @@
 import React from "react";
 import Typography from "@mui/material/Typography";
-import { useAppDispatch, useAppSelector } from "../../store";
-import { selectModulesBySemesterId } from "../../store/semester/semester-slice-selectors";
+import { useAppDispatch, useAppSelector } from "../../../store";
+import { selectModulesBySemesterId } from "../../../store/semester/semester-slice-selectors";
 import ModuleView from "./ModuleView";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import { addModuleToSemesterById } from "../../store/semester/semester-slice";
+import { addModuleToSemesterById } from "../../../store/semester/semester-slice";
 
 const styles = {
   modulesContainer: {

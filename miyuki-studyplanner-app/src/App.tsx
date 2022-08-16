@@ -6,8 +6,11 @@ import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import CustomAppBar from "./components/base/CustomAppBar";
 import SideDrawer, { DrawerHeader, sideDrawerWidth } from "./components/base/SideDrawer";
-import SemestersPage from "./components/semester/SemestersPage";
 import type {} from "@mui/lab/themeAugmentation";
+import SemesterView from "./components/semester/SemesterView";
+import StartingPage from "./components/starting-page/StartingPage";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 
 const theme = createTheme({
   typography: {
@@ -63,19 +66,22 @@ function App() {
   };
 
   return (
-    <ThemeProvider theme={theme}>
-      <Box sx={{ display: "flex" }}>
-        <CssBaseline />
-        <CustomAppBar isSideDrawerOpen={isSideDrawerOpen} onDrawerOpen={handleDrawerOpen} />
-        <SideDrawer isOpen={isSideDrawerOpen} onDrawerClose={handleDrawerClose} />
-        <Main open={isSideDrawerOpen}>
-          <DrawerHeader />
-          <Routes>
-            <Route path="/" element={<SemestersPage />} />
-          </Routes>
-        </Main>
-      </Box>
-    </ThemeProvider>
+    <LocalizationProvider dateAdapter={AdapterDateFns}>
+      <ThemeProvider theme={theme}>
+        <Box sx={{ display: "flex" }}>
+          <CssBaseline />
+          <CustomAppBar isSideDrawerOpen={isSideDrawerOpen} onDrawerOpen={handleDrawerOpen} />
+          <SideDrawer isOpen={isSideDrawerOpen} onDrawerClose={handleDrawerClose} />
+          <Main open={isSideDrawerOpen}>
+            <DrawerHeader />
+            <Routes>
+              <Route index element={<StartingPage />} />
+              <Route path="semesters/:semesterId" element={<SemesterView />} />
+            </Routes>
+          </Main>
+        </Box>
+      </ThemeProvider>
+    </LocalizationProvider>
   );
 }
 

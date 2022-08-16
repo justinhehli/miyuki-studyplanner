@@ -1,24 +1,34 @@
 import React, { useState } from "react";
 import Box from "@mui/material/Box";
-import Slide from "@mui/material/Slide";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import TabPanel, { tabA11yProps } from "../base/TabPanel";
 import SemesterInfo from "./SemesterInfo";
-import SemesterModules from "./SemesterModules";
-import ISemester from "../../models/semester/i-semester";
-import SemesterSchedule from "./SemesterSchedule";
+import SemesterModules from "./semester-module/SemesterModules";
+import SemesterSchedule from "./semester-schedule/SemesterSchedule";
+import { useParams } from "react-router-dom";
+import { useAppSelector } from "../../store";
+import { selectSemesterById } from "../../store/semester/semester-slice-selectors";
+import Container from "@mui/material/Container";
+import Slide from "@mui/material/Slide";
 
-const SemesterView: React.FC<{ semester: ISemester }> = (props) => {
+const SemesterView: React.FC = () => {
   const [semesterMenuTabsValue, setSemesterMenuTabsValue] = useState(0);
+
+  const { semesterId } = useParams<{ semesterId: string }>() as { semesterId: string };
+  const semester = useAppSelector(selectSemesterById(semesterId));
 
   const semesterMenuTabValueChangeHandler = (_event: React.SyntheticEvent, newValue: number) => {
     setSemesterMenuTabsValue(newValue);
   };
 
+  if (semester == null) {
+    return null;
+  }
+
   return (
-    <Slide direction="down" in={true}>
-      <Box sx={{ width: "100%" }}>
+    <Slide key={semesterId} direction="down" in={true}>
+      <Box>
         <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
           <Tabs
             value={semesterMenuTabsValue}
@@ -31,13 +41,17 @@ const SemesterView: React.FC<{ semester: ISemester }> = (props) => {
           </Tabs>
         </Box>
         <TabPanel value={semesterMenuTabsValue} index={0}>
-          <SemesterInfo semester={props.semester} />
+          <Container maxWidth="md">
+            <SemesterInfo semester={semester} />
+          </Container>
         </TabPanel>
         <TabPanel value={semesterMenuTabsValue} index={1}>
-          <SemesterModules semesterId={props.semester.id} />
+          <Container maxWidth="md">
+            <SemesterModules semesterId={semester.id} />
+          </Container>
         </TabPanel>
         <TabPanel value={semesterMenuTabsValue} index={2}>
-          <SemesterSchedule semesterId={props.semester.id} />
+          <SemesterSchedule semesterId={semester.id} />
         </TabPanel>
       </Box>
     </Slide>
