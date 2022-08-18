@@ -4,7 +4,7 @@ import Divider from "@mui/material/Divider";
 import Drawer from "@mui/material/Drawer";
 import IconButton from "@mui/material/IconButton";
 import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import { styled } from "@mui/material/styles";
 import DashboardIcon from "@mui/icons-material/Dashboard";
@@ -57,29 +57,29 @@ const SideDrawer: React.FC<{ isOpen: boolean; onDrawerClose: () => void }> = (pr
         </IconButton>
       </DrawerHeader>
       <Divider />
-      <List>
+      <List component="nav">
         {[{ key: "Home", icon: DashboardIcon }].map((i) => (
-          <ListItem key={i.key} button onClick={homeClickHandler}>
+          <ListItemButton key={i.key} onClick={homeClickHandler}>
             <ListItemIcon>
               <i.icon />
             </ListItemIcon>
             <ListItemText primary={i.key} />
-          </ListItem>
+          </ListItemButton>
         ))}
 
-        <ListItem>
+        <ListItemButton>
           <ListItemIcon>
             <CalendarMonthIcon />
           </ListItemIcon>
           <ListItemText primary="Semesters" />
-        </ListItem>
-        <Collapse in={true}>
+        </ListItemButton>
+        <Collapse in={true} unmountOnExit>
           <List component="div" disablePadding dense>
             {semesters.map((s) => (
               <MenuItem key={s.id}>
-                <ListItem onClick={(_event: React.MouseEvent) => semesterClickHandler(s.id)}>
+                <ListItemButton onClick={(_event: React.MouseEvent) => semesterClickHandler(s.id)}>
                   <ListItemText primary={`Semester ${s.index}`} />
-                </ListItem>
+                </ListItemButton>
               </MenuItem>
             ))}
           </List>

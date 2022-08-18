@@ -71,7 +71,7 @@ const SemesterSchedule: React.FC<{ semesterId: string }> = (props) => {
           <MonthView />
 
           <Appointments appointmentComponent={MiyukiAppointment} />
-          <AppointmentTooltip showOpenButton showDeleteButton layoutComponent={MiyukiAppointmentTooltip} />
+          <AppointmentTooltip showOpenButton layoutComponent={MiyukiAppointmentTooltip} />
         </Scheduler>
       </Paper>
 
