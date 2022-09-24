@@ -1,15 +1,24 @@
-import { AppointmentModel } from "@devexpress/dx-react-scheduler";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import React, { useState } from "react";
-import { useAppDispatch } from "../../../store";
-import { deleteAppointmentById, updateAppointmentValues } from "../../../store/semester/semester-slice";
+import { useAppDispatch, useAppSelector } from "../../../store";
+import {
+  addAppointmentToSemester,
+  deleteAppointmentById,
+  updateAppointmentValues,
+} from "../../../store/semester/semester-slice";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 import RecurrenceEditForm from "./RecurrenceEditForm";
+import { selectModulesBySemesterId } from "../../../store/semester/semester-slice-selectors";
+import FormControl from "@mui/material/FormControl";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import IMiyukiAppointmentModel from "../../../models/semester/i-miyuki-appointment-model";
 
 const classes = {
   centeredRowFlexbox: {
@@ -20,23 +29,31 @@ const classes = {
   },
 };
 
-const ScheduleAppointmentEditForm: React.FC<{ appointment: AppointmentModel; onClose: () => void }> = ({
-  appointment,
-  onClose,
-}) => {
+const ScheduleAppointmentEditForm: React.FC<{
+  appointment: IMiyukiAppointmentModel;
+  isNewAppointment: boolean;
+  onClose: () => void;
+}> = ({ appointment, isNewAppointment, onClose }) => {
   const [updatedAppointment, setUpdatedAppointment] = useState(appointment);
   const [isRecurring, setIsRecurring] = useState(appointment.rRule !== undefined);
 
   const dispatch = useAppDispatch();
+  const currentSemesterModules = useAppSelector(selectModulesBySemesterId(appointment.semesterId));
 
   const submitHandler = () => {
-    dispatch(updateAppointmentValues(updatedAppointment));
+    if (isNewAppointment) {
+      dispatch(addAppointmentToSemester(updatedAppointment));
+    } else {
+      dispatch(updateAppointmentValues(updatedAppointment));
+    }
     onClose();
   };
 
   const deleteClickHandler = (_event: React.MouseEvent) => {
     if (updatedAppointment.id != null && typeof updatedAppointment.id === "string") {
-      dispatch(deleteAppointmentById(updatedAppointment.id));
+      if (!isNewAppointment) {
+        dispatch(deleteAppointmentById(updatedAppointment.id));
+      }
       onClose();
     }
   };
@@ -68,12 +85,34 @@ const ScheduleAppointmentEditForm: React.FC<{ appointment: AppointmentModel; onC
     setUpdatedAppointment((prevApp) => ({ ...prevApp, rRule: rRuleStr }));
   };
 
+  const moduleChangeHandler = (event: SelectChangeEvent) => {
+    setUpdatedAppointment((prevApp) => ({ ...prevApp, moduleId: event.target.value }));
+  };
+
   return (
     <form onSubmit={submitHandler}>
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <Typography variant="h6">Details</Typography>
         </Grid>
+
+        {(isNewAppointment || appointment.moduleId != null) && (
+          <Grid item xs={12}>
+            <FormControl fullWidth variant="standard" size="small">
+              <InputLabel>Module</InputLabel>
+              <Select
+                value={appointment.moduleId ?? undefined}
+                label="Module"
+                disabled={!isNewAppointment}
+                onChange={moduleChangeHandler}
+              >
+                {currentSemesterModules?.map((m) => (
+                  <MenuItem value={m.id}>{m.title}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+        )}
 
         <Grid item xs={12}>
           <TextField

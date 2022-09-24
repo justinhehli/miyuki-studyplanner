@@ -8,15 +8,19 @@ import { useTheme } from "@mui/material/styles";
 import ScheduleAppointmentEditForm from "./ScheduleAppointmentEditForm";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
+import Fab from "@mui/material/Fab";
+import AddIcon from "@mui/icons-material/Add";
+import Box from "@mui/material/Box";
+import IMiyukiAppointmentModel, { getNewDefaultAppointment } from "../../../models/semester/i-miyuki-appointment-model";
 
 interface ISchedulerContext {
-  currentlyEditedAppointment: AppointmentModel | null;
-  setCurrentlyEditedAppointment: (appointment: AppointmentModel) => void;
+  currentlyEditedAppointment: { appointment: AppointmentModel; isNewTemporary: boolean } | null;
+  setCurrentlyEditedAppointment: (appointment: { appointment: AppointmentModel; isNewTemporary: boolean }) => void;
 }
 
 const schedulerContext = createContext<ISchedulerContext>({
   currentlyEditedAppointment: null,
-  setCurrentlyEditedAppointment: (appointment: AppointmentModel) => {},
+  setCurrentlyEditedAppointment: ({ appointment: AppointmentModel, isNewTemporary: boolean }) => {},
 });
 
 const MiyukiAppointment = ({ children, data, ...restProps }: Appointments.AppointmentProps) => {
@@ -41,20 +45,27 @@ const MiyukiAppointmentTooltip = (props: AppointmentTooltip.LayoutProps) => {
 
   const openButtonClickHandler = () => {
     if (props.appointmentMeta?.data != null) {
-      setCurrentlyEditedAppointment(props.appointmentMeta.data);
+      setCurrentlyEditedAppointment({ appointment: props.appointmentMeta.data, isNewTemporary: false });
     }
   };
 
   return <AppointmentTooltip.Layout onOpenButtonClick={openButtonClickHandler} {...props} />;
 };
 
-const SemesterSchedule: React.FC<{ semesterId: string }> = (props) => {
-  const [currentlyEditedAppointment, setCurrentlyEditedAppointment] = useState<AppointmentModel | null>(null);
+const SemesterSchedule: React.FC<{ semesterId: string }> = ({ semesterId }) => {
+  const [currentlyEditedAppointment, setCurrentlyEditedAppointment] = useState<{
+    appointment: AppointmentModel;
+    isNewTemporary: boolean;
+  } | null>(null);
 
-  const appointments = useAppSelector(selectAppointmentsBySemesterId(props.semesterId));
+  const appointments = useAppSelector(selectAppointmentsBySemesterId(semesterId));
 
   const handleEditFormClose = () => {
     setCurrentlyEditedAppointment(null);
+  };
+
+  const newAppointmentClickHandler = (_event: React.MouseEvent<HTMLButtonElement>) => {
+    setCurrentlyEditedAppointment({ appointment: getNewDefaultAppointment(semesterId), isNewTemporary: true });
   };
 
   return (
@@ -65,6 +76,17 @@ const SemesterSchedule: React.FC<{ semesterId: string }> = (props) => {
       }}
     >
       <Paper sx={{ padding: 1 }}>
+        <Box sx={{ position: "relative" }}>
+          <Fab
+            color="primary"
+            size="small"
+            sx={{ color: "#FFFFFF", position: "absolute", right: 0 }}
+            onClick={newAppointmentClickHandler}
+          >
+            <AddIcon />
+          </Fab>
+        </Box>
+
         <Scheduler data={appointments ?? []} firstDayOfWeek={1}>
           <ViewState />
 
@@ -78,7 +100,11 @@ const SemesterSchedule: React.FC<{ semesterId: string }> = (props) => {
       {currentlyEditedAppointment != null && (
         <Dialog open={currentlyEditedAppointment != null} maxWidth="sm" fullWidth onClose={handleEditFormClose}>
           <DialogContent>
-            <ScheduleAppointmentEditForm appointment={currentlyEditedAppointment} onClose={handleEditFormClose} />
+            <ScheduleAppointmentEditForm
+              appointment={currentlyEditedAppointment.appointment as IMiyukiAppointmentModel}
+              isNewAppointment={currentlyEditedAppointment.isNewTemporary}
+              onClose={handleEditFormClose}
+            />
           </DialogContent>
         </Dialog>
       )}

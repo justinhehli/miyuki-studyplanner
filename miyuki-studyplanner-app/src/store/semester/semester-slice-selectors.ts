@@ -1,6 +1,5 @@
 import { createSelector } from "@reduxjs/toolkit";
 import { RootState } from "..";
-import IModule from "../../models/semester/i-module";
 
 export const selectAllSemestersSorted = (state: RootState) =>
   [...state.semester.semesters].sort((a, b) => b.index - a.index);

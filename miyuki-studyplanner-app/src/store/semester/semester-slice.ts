@@ -33,16 +33,16 @@ const semester7ModuleTestData: IModule[] = [
 const semester7ScheduleTestData: IMiyukiAppointmentModel[] = [
   {
     id: uuidv4(),
-    startDate: new Date(2022, 7, 6, 12, 0).toISOString(),
-    endDate: new Date(2022, 7, 6, 16, 0).toISOString(),
+    startDate: new Date(2022, 8, 24, 12, 0).toISOString(),
+    endDate: new Date(2022, 8, 24, 16, 0).toISOString(),
     title: "Some random event",
     semesterId: semester7Id,
     moduleId: null,
   },
   {
     id: uuidv4(),
-    startDate: new Date(2022, 7, 4, 12, 0).toISOString(),
-    endDate: new Date(2022, 7, 4, 16, 0).toISOString(),
+    startDate: new Date(2022, 8, 25, 12, 0).toISOString(),
+    endDate: new Date(2022, 8, 25, 16, 0).toISOString(),
     title: "BioChem1 appointment",
     semesterId: semester7Id,
     moduleId: semester7Biochemistry1Id,
@@ -155,6 +155,12 @@ export const semesterSlice = createSlice({
         state.semesters[i - 1].modules.splice(moduleIndex, 1);
       }
     },
+    addAppointmentToSemester(state, action: PayloadAction<IMiyukiAppointmentModel>) {
+      const semester = state.semesters.find((s) => s.id === action.payload.semesterId);
+      if (semester != null) {
+        semester.appointments.push(action.payload);
+      }
+    },
     updateAppointmentValues(state, action: PayloadAction<AppointmentModel>) {
       const semester = state.semesters.find((s) => s.id === action.payload.semesterId);
       const appointment = semester?.appointments.find((a) => a.id === action.payload.id);
@@ -187,6 +193,7 @@ export const {
   addModuleToSemesterById,
   deleteModuleById,
   updateModuleValues,
+  addAppointmentToSemester,
   updateAppointmentValues,
   deleteAppointmentById,
 } = semesterSlice.actions;
