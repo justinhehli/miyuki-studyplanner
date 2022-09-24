@@ -10,11 +10,13 @@ import { styled } from "@mui/material/styles";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import ListItemText from "@mui/material/ListItemText";
-import { useAppSelector } from "../../store";
+import { useAppDispatch, useAppSelector } from "../../store";
 import { selectAllSemestersSorted } from "../../store/semester/semester-slice-selectors";
 import Collapse from "@mui/material/Collapse";
 import MenuItem from "@mui/material/MenuItem";
 import { useNavigate } from "react-router-dom";
+import Button from "@mui/material/Button";
+import { addSemester } from "../../store/semester/semester-slice";
 
 export const sideDrawerWidth = 240;
 export const DrawerHeader = styled("div")(({ theme }) => ({
@@ -41,12 +43,18 @@ const SideDrawer: React.FC<{ isOpen: boolean; onDrawerClose: () => void }> = (pr
 
   const navigate = useNavigate();
 
+  const dispatch = useAppDispatch();
+
   const semesterClickHandler = (semesterId: string) => {
     navigate(`/semesters/${semesterId}`);
   };
 
   const homeClickHandler = (_event: React.MouseEvent) => {
     navigate("/");
+  };
+
+  const addSemesterClickHandler = (_event: React.MouseEvent<HTMLButtonElement>) => {
+    dispatch(addSemester());
   };
 
   return (
@@ -82,6 +90,11 @@ const SideDrawer: React.FC<{ isOpen: boolean; onDrawerClose: () => void }> = (pr
                 </ListItemButton>
               </MenuItem>
             ))}
+            <MenuItem>
+              <Button variant="text" size="small" sx={{ pl: 2, pr: 2 }} onClick={addSemesterClickHandler}>
+                + Semester
+              </Button>
+            </MenuItem>
           </List>
         </Collapse>
       </List>
