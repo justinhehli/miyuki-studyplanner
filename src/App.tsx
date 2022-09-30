@@ -11,6 +11,7 @@ import SemesterView from "./components/semester/SemesterView";
 import StartingPage from "./components/starting-page/StartingPage";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { useEffect } from "react";
 
 const theme = createTheme({
   typography: {
@@ -56,6 +57,13 @@ const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
 
 function App() {
   const [isSideDrawerOpen, setIsSideDrawerOpen] = useState(false);
+
+  useEffect(() => {
+    (async function () {
+      const { text } = await (await fetch(`/api/HttpTrigger1`)).json();
+      console.log(text);
+    })();
+  });
 
   const handleDrawerOpen = () => {
     setIsSideDrawerOpen(true);
