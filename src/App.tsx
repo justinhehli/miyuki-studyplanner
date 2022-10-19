@@ -60,8 +60,8 @@ function App() {
 
   useEffect(() => {
     (async function () {
-      const { text } = await (await fetch(`/api/HttpTrigger1`)).json();
-      console.log(text);
+      const result = await (await fetch(`/api/HttpTrigger1`)).json();
+      console.log(result);
     })();
   });
 
