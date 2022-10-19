@@ -23,7 +23,7 @@ const schedulerContext = createContext<ISchedulerContext>({
   setCurrentlyEditedAppointment: ({ appointment: AppointmentModel, isNewTemporary: boolean }) => {},
 });
 
-const MiyukiAppointment = ({ children, data, ...restProps }: Appointments.AppointmentProps) => {
+const MiyukiAppointment = ({ data, children, ...restProps }: Appointments.AppointmentProps) => {
   const module = useAppSelector(selectModuleById(data.semesterId, data.moduleId));
   const theme = useTheme();
 

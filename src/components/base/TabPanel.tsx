@@ -7,8 +7,14 @@ export const tabA11yProps = (index: number) => {
   };
 };
 
-const TabPanel: React.FC<{ index: number; value: number; width?: string; containerPadding?: number }> = (props) => {
-  const { children, value, index, width, containerPadding, ...other } = props;
+const TabPanel: React.FC<{
+  index: number;
+  value: number;
+  width?: string;
+  containerPadding?: number;
+  children: React.ReactNode;
+}> = (props) => {
+  const { value, index, width, containerPadding, children, ...other } = props;
 
   return (
     <div
