@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 import { createTheme, styled, ThemeProvider } from "@mui/material/styles";
@@ -11,7 +11,7 @@ import SemesterView from "./components/semester/SemesterView";
 import StartingPage from "./components/starting-page/StartingPage";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { useEffect } from "react";
+import axios from "axios";
 
 const theme = createTheme({
   typography: {
@@ -60,10 +60,11 @@ function App() {
 
   useEffect(() => {
     (async function () {
-      const { text } = await (await fetch(`/api/HttpTrigger1`)).json();
-      console.log(text);
+      const response = await axios.get("/api/HttpTrigger1");
+      //const response = await await fetch(`/api/HttpTrigger1`);
+      console.log(response);
     })();
-  });
+  }, []);
 
   const handleDrawerOpen = () => {
     setIsSideDrawerOpen(true);

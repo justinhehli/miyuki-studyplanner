@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
-namespace Miyuki.Function
+namespace miyuki.api
 {
     public static class HttpTrigger1
     {
@@ -29,6 +29,7 @@ namespace Miyuki.Function
                 ? "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response."
                 : $"Hello, {name}. This HTTP triggered function executed successfully.";
 
+            //return new JsonResult(new DateTime());
             return new OkObjectResult(responseMessage);
         }
     }
